@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>小可爱测验</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family: "Comic Sans MS", "幼圆", "PingFang SC", sans-serif;
+         display:flex;align-items:center;justify-content:center;
+         background:linear-gradient(180deg,#fff0f6,#ffe4f1);
+         background-image:url('https://png.pngtree.com/png-clipart/20210309/original/pngtree-cute-hand-drawn-pink-love-heart-pattern-background-png-image_5982631.jpg');
+         background-size:cover;}
+    .wrap{width:100%;max-width:520px;padding:20px}
+    .card{background:rgba(255,255,255,0.9);border-radius:20px;
+          box-shadow:0 8px 30px rgba(255,105,180,0.2);
+          padding:22px;text-align:center;position:relative;overflow:hidden}
+    h1{font-size:22px;margin-bottom:16px;color:#ff4d94}
+    .illustrations{display:flex;justify-content:center;gap:20px;margin-bottom:10px}
+    .illustrations img{width:70px;height:70px}
+    .heart-area{height:220px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;margin:10px 0}
+    svg.heart{width:120px;height:120px;transition:transform .35s ease}
+    .btn-row{display:flex;gap:14px;justify-content:center;margin-top:18px}
+    button{padding:14px 18px;border-radius:14px;border:0;font-size:16px;
+           box-shadow:0 6px 18px rgba(0,0,0,0.1);flex:1;min-width:120px;cursor:pointer}
+    .btn-love{background:linear-gradient(90deg,#ff7aa9,#ff3b7a);color:white}
+    .btn-not{background:#fff;border:1px solid #ffd3e7;color:#ff3b7a}
+    .overlay{position:fixed;left:0;top:0;right:0;bottom:0;
+             display:none;align-items:center;justify-content:center;
+             background:rgba(0,0,0,0.45);z-index:60}
+    .overlay.show{display:flex}
+    .modal{width:90%;max-width:420px;background:white;border-radius:18px;padding:24px;text-align:center}
+    .modal h2{color:#ff3b7a;margin-bottom:12px;font-size:20px}
+    .modal .cute-img{margin-top:10px}
+    .modal .cute-img img{width:80px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="illustrations">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="bear"/>
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616430.png" alt="cat"/>
+      </div>
+      <h1>你爱不爱我呀？</h1>
+      <div class="heart-area" id="heartArea">
+        <svg class="heart" id="heartSvg" viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg">
+          <path id="heartPath" d="M23.6 0c-2.9 0-5.4 1.7-6.6 4.1C15.8 1.7 13.3 0 10.4 0 4.6 0 0 4.9 0 10.9c0 7.6 9 12.6 16 18.7 7-6.1 16-11.1 16-18.7C32 4.9 27.4 0 23.6 0z" fill="#ff7aa9"/>
+        </svg>
+      </div>
+      <div class="btn-row">
+        <button id="loveBtn" class="btn-love">爱我</button>
+        <button id="notBtn" class="btn-not">不爱我</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2>再选一次吧~</h2>
+      <p>这回只能选：</p>
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button id="secondLove" class="btn-love" style="flex:1">爱我</button>
+        <button id="extraLove" class="btn-love" style="flex:1;background:linear-gradient(90deg,#ffd166,#ff6b6b);color:#fff">特别爱我</button>
+      </div>
+      <div class="cute-img">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="bear cute"/>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const loveBtn = document.getElementById('loveBtn');
+      const notBtn = document.getElementById('notBtn');
+      const heartSvg = document.getElementById('heartSvg');
+      const overlay = document.getElementById('overlay');
+      const secondLove = document.getElementById('secondLove');
+      const extraLove = document.getElementById('extraLove');
+      let notCount = 0;
+
+      function animateHeartBig(scale=2){
+        heartSvg.style.transition = 'transform 400ms ease';
+        heartSvg.style.transform = `scale(${scale})`;
+        setTimeout(()=>{ heartSvg.style.transform = ''; }, 1000);
+      }
+
+      loveBtn.addEventListener('click', ()=>{ animateHeartBig(2.2); });
+      notBtn.addEventListener('click', ()=>{
+        notCount++;
+        loveBtn.style.transform = `scale(${1 + 0.25*notCount})`;
+        loveBtn.style.transition = 'transform 220ms ease';
+        if(notCount >= 5){ setTimeout(()=>{ overlay.classList.add('show'); }, 400); notCount=0; loveBtn.style.transform = ''; }
+      });
+
+      secondLove.addEventListener('click', ()=>{ overlay.classList.remove('show'); animateHeartBig(2.4); });
+      extraLove.addEventListener('click', ()=>{ overlay.classList.remove('show'); animateHeartBig(3); });
+    })();
+  </script>
+</body>
+</html>
